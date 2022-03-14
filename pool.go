@@ -12,8 +12,8 @@ type (
 		Destructor  Destructor
 		Current     uint32
 		Storage     chan interface{}
-		Limit uint32
-		close uint32
+		Limit       uint32
+		close       uint32
 	}
 )
 
@@ -22,7 +22,7 @@ func NewPool(constructor Constructor, destructor Destructor, limit uint32) (p *P
 		Constructor: constructor,
 		Destructor:  destructor,
 		Storage:     make(chan interface{}, limit),
-		Limit: limit,
+		Limit:       limit,
 	}
 
 	return
@@ -56,7 +56,7 @@ func (p *Pool) Close() (err error) {
 		return
 	}
 	for i := 0; i < int(p.Current); i++ {
-		itf := <- p.Storage
+		itf := <-p.Storage
 		p.Destructor(itf)
 	}
 	return
